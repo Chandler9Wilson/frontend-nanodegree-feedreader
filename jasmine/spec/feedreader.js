@@ -31,59 +31,61 @@ $(function() {
                 expect(allFeeds[i].url).toBeDefined();
                 expect(allFeeds[i].url.length).not.toBe(0);
             }
-        })
+        });
 
         it('the name exists', function() {
             for (var i = 0; i < allFeeds.length; i++) {
                 expect(allFeeds[i].name).toBeDefined();
                 expect(allFeeds[i].name.length).not.toBe(0);
             }
-        })
+        });
     });
 
     describe('The menu', function() {
         it('is hidden by default', function() {
             expect($('body').hasClass('menu-hidden')).toBe(true);
-        })
+        });
 
         //needs to be run in order to work
         describe('toggle', function() {
             //simulates a click event before each test
             beforeEach(function() {
                 $('.menu-icon-link').trigger('click');
-            })
+            });
 
             it('open works', function() {
                 expect($('body').hasClass('menu-hidden')).toBe(false);
-            })
+            });
 
             it('close works', function() {
                 expect($('body').hasClass('menu-hidden')).toBe(true);
-            })
-        })
-    })
+            });
+        });
+    });
 
     describe('Initial Entries', function() {
         beforeEach(function(done) {
             $('.feed').empty();
             loadFeed(0, done);
-        })
+        });
 
         it('exist when loadFeed is called', function() {
-            expect($('.feed').contents().length).not.toBe(0);
-        })
-    })
+            expect($('.feed .entry').length).toBeGreaterThan(0);
+        });
+    });
 
     describe('New Feed Selection', function() {
-        var content = $('.feed').contents();
-
-        beforeEach(function(done) {
-            loadFeed(1, done);
-        })
+        var firstContents;
+        beforeAll(function(done) {
+            loadFeed(0, function() {
+                firstContents = $('.feed').text();
+                loadFeed(1, done);
+            });
+        });
 
         it('changes the content on screen', function() {
-            expect($('.feed').contents()).not.toEqual(content);
+            expect($('.feed').text()).not.toEqual(firstContents);
             expect($('.feed').contents().length).not.toBe(0);
-        })
-    })
+        });
+    });
 }());
